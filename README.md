@@ -1,7 +1,5 @@
 # subfix
-fixes time discrepancy in .ass subtitles <br>
-only if the subs are late
-
+fixes time discrepancies in .ass subtitles <br>
 
 ## usage
 ```bash
