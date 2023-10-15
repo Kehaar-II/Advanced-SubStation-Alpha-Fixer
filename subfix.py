@@ -1,7 +1,7 @@
 import sys, os.path
 
 startTimestampOffset = 12
-endTimestampOffset = startTimestampOffset + 11
+endTimestampOffset = 23
 
 def offsetTimestamp(timestamp, offset):
     '''str, int -> str
@@ -25,30 +25,44 @@ def offsetTimestamp(timestamp, offset):
             minutes = 0
             hour += 1 if hour >= 9 else 9
 
-    print(timestamp)
-    print(str(hour) + ":" + str(minutes) + ":" + str(seconds) + "." + str(centiseconds) + "\n")
-
-    return str(hour) + ":" + str(minutes) + ":" + str(seconds) + "." + str(centiseconds)
+    return str(hour).zfill(1) + ":" + str(minutes).zfill(2) + ":" + str(seconds).zfill(2) + "." + str(centiseconds).zfill(2)
 
 
 def main():
     ''' '''
-    if (len(sys.argv) == 1):
+    if (len(sys.argv) < 4):
         return 1
     if (not os.path.isfile(sys.argv[1])):
         return 1
+
     file = open(sys.argv[1], "r")
-
-    count = 0
     lines = file.readlines()
-    for line in lines:
-        # print(line[startTimestampOffset:], end = '')
-        # print(line[endTimestampOffset:])
 
-        if count >= 39:
-            offsetTimestamp(line[startTimestampOffset:startTimestampOffset + 10], 100)
-        count += 1
+    offset = int(sys.argv[2])
+    start = int(sys.argv[3]) - 1
+    end = 4294967295
+    if (len(sys.argv) == 5):
+        end = int(sys.argv[4]) - 1
+        end = min(end, len(lines))
+    else:
+        end = len(lines)
 
+    # prints first untouched part of the file if it exists
+    for i in range(0, start):
+        print(lines[i], end = "")
+    for i in range(start, end):
+        line = lines[i]
+        startStart = startTimestampOffset
+        startEnd = startTimestampOffset + 10
+        endStart = endTimestampOffset
+        endEnd = endTimestampOffset + 10
+
+        newStart = offsetTimestamp(line[startStart:startEnd], offset)
+        newEnd = offsetTimestamp(line[endStart:endEnd], offset)
+        print(line[:startStart] + newStart + "," + newEnd + line[endEnd:], end = "")
+    # prints second untouched part of the file if it exists
+    for i in range(end, len(lines)):
+        print(lines[i], end = "")
     return 0
 
 exit(main())
