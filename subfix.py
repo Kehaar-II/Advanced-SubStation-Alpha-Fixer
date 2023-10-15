@@ -13,20 +13,32 @@ def offsetTimestamp(timestamp, offset):
     centiseconds = int(timestamp[8:10])
 
     offset //= 10 # convertion from milliseconds to centiseconds
-    for i in range(offset):
-        centiseconds += 1
-        if centiseconds > 99:
-            centiseconds = 0
-            seconds += 1
-        if seconds > 59:
-            seconds = 0
-            minutes += 1
-        if minutes > 59:
-            minutes = 0
-            hour += 1 if hour >= 9 else 9
+    if (offset >= 0):
+        for i in range(offset):
+            centiseconds += 1
+            if centiseconds > 99:
+                centiseconds = 0
+                seconds += 1
+            if seconds > 59:
+                seconds = 0
+                minutes += 1
+            if minutes > 59:
+                minutes = 0
+                hour += 1 if hour >= 9 else 9
+    else:
+        for i in range(0 - offset):
+            centiseconds -= 1
+            if centiseconds < 0:
+                centiseconds = 99
+                seconds -= 1
+            if seconds < 0:
+                seconds = 59
+                minutes -= 1
+            if minutes < 0:
+                minutes = 59
+                hour -= 1
 
     return str(hour).zfill(1) + ":" + str(minutes).zfill(2) + ":" + str(seconds).zfill(2) + "." + str(centiseconds).zfill(2)
-
 
 def main():
     ''' '''
