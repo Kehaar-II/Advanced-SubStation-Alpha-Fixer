@@ -3,7 +3,7 @@ Fixes time discrepancies in .ass subtitles. <br>
 
 ## usage
 ```bash
-python3 stufix.py sub_file offset start_line stop_line
+python3 subfix.py sub_file offset start_line stop_line
 ```
 offset: desired offset in milliseconds <br>
 start_line: first line of the file to be affected <br>
